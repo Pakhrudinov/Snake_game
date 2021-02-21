@@ -1,0 +1,57 @@
+import tkinter as tk
+
+
+def main():
+    global s
+    s.move()
+    root.after(100, main)
+
+
+class Segment:
+    def __init__(self, x, y):
+        self.segment = playing_field_cv.create_rectangle(x, y,
+                                                         x + seg_size,
+                                                         y + seg_size,
+                                                         fill='green')
+
+
+class Snake:
+    def __init__(self, segmets):
+        self.segments = segmets
+        self.snake = playing_field_cv.create_rectangle(10, 10, 10 + seg_size, 10 + seg_size, fill='green')
+        self.mapping = {'Down': (0, 1), 'Right': (1, 0), 'Left': (-1, 0), 'Up': (0, -1)}
+        self.vector = self.mapping['Right']
+
+    def move(self):
+        for index in range(len(self.segments)):
+
+
+        x1, y1, x2, y2 = playing_field_cv.coords(self.snake)
+        playing_field_cv.coords(self.snake,
+                                x1 + seg_size * self.vector[0],
+                                y1 + seg_size * self.vector[1],
+                                x2 + seg_size * self.vector[0],
+                                y2 + seg_size * self.vector[1])
+
+    def change_direction(self, event):
+        if event.keysym in self.mapping:
+            self.vector = self.mapping[event.keysym]
+
+
+root = tk.Tk()
+root.title('Zmeika')
+width = 800
+height = 600
+seg_size = 20
+x, y = 10, 10
+in_game = True
+
+playing_field_cv = tk.Canvas(width=width, height=height, bg='#000000')
+playing_field_cv.grid()
+playing_field_cv.focus_set()
+
+s = Snake()
+main()
+playing_field_cv.bind('<KeyPress>', s.change_direction)
+
+root.mainloop()
